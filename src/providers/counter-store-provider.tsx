@@ -1,6 +1,6 @@
 'use client'
 
-import { type ReactNode, createContext, useRef, useContext } from 'react'
+import { type ReactNode, createContext, useContext, useState } from 'react'
 import { useStore } from 'zustand'
 
 import { type CounterStore, createCounterStore, initCounterStore } from '@/stores/counter-store'
@@ -14,14 +14,10 @@ export interface CounterStoreProviderProps {
 }
 
 export const CounterStoreProvider = ({ children }: CounterStoreProviderProps) => {
-  const storeRef = useRef<CounterStoreApi | null>(null)
-
-  if (!storeRef.current) {
-    storeRef.current = createCounterStore(initCounterStore())
-  }
+  const [store] = useState(() => createCounterStore(initCounterStore()))
 
   return (
-    <CounterStoreContext.Provider value={storeRef.current}>{children}</CounterStoreContext.Provider>
+    <CounterStoreContext.Provider value={store}>{children}</CounterStoreContext.Provider>
   )
 }
 
